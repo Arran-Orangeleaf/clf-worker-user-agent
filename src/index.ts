@@ -12,7 +12,19 @@
  */
 
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
+	async fetch(
+	  request: Request,
+	  env: Record<string, unknown>,
+	  ctx: ExecutionContext
+	): Promise<Response> {
+	  const userAgent = request.headers.get('User-Agent') || '';
+  
+	  if (userAgent.includes('Orangeleaf-Bot')) {
+		return new Response('Hello, Orangeleaf-Bot!', {
+		  headers: { 'Content-Type': 'text/plain' },
+		});
+	  }   
+	  // Default: pass through to origin
+	  return fetch(request);
 	},
-} satisfies ExportedHandler<Env>;
+};  
